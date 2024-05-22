@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1600</width>
-    <height>900</height>
+    <height>875</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,6 +32,25 @@
      </property>
      <property name="rowCount">
       <number>0</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Yu Gothic UI</family>
+       <pointsize>22</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>ОФОРМИТЬ ЗАКАЗ</string>
      </property>
     </widget>
    </item>

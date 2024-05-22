@@ -30,6 +30,8 @@ public:
     QList <QString> pos;
     int line_counter = 0;
     QList <QString> basket_pos;
+    void set_stock();
+    void set_unabled();
 
 private slots:
     void on_exit_button_clicked();

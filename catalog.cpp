@@ -39,13 +39,23 @@ void catalog::set_catalog_pos()
     QList <string> buff;
     string buf;
     stringstream test(each_line);
+    int delim_counter = 0;
     while(getline(test, buf, '\n')){
-        char *arr = new char[buf.length()+1];
-        strcpy(arr, buf.c_str());
-        buff.append(strtok(arr,";"));
-        if(arr != ""){
-            buff.append(strtok(NULL,";"));
-        }
+        while(delim_counter < 1){
+            char *arr = new char[buf.length()+1];
+            strcpy(arr, buf.c_str());
+            string bufStr = strtok(arr,";");
+            buff.append(bufStr);
+            ++delim_counter;
+            while(!bufStr.empty()){
+                bufStr = strtok(NULL, ";");
+                buff.append(bufStr);
+                ++delim_counter;
+                if(delim_counter == 4){
+                    break;
+                }
+            }
+        } delim_counter = 0;
     }
 
     for(int i = 0; i < buff.length(); i++){
@@ -56,22 +66,25 @@ void catalog::set_catalog_pos()
 
 void catalog::set_tableView()
 {
-
     ui->tableWidget->setRowCount(line_counter);
-    ui->tableWidget->setColumnCount(4);
-    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Name" << "Price(rub)" << "Enabled" << "Category");
+    ui->tableWidget->setColumnCount(5);
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Name" << "Price(rub)"
+                                               << "Enabled" << "Category" << "In stock");
     set_category();
     set_checkBoxes();
+    set_stock();
+    set_unabled();
 
     QList <QString> buff;
-    for(int i =0; i< pos.length(); i++){
+    for(int i = 0; i < pos.length(); i+=4){
         buff.append(pos.at(i));
+        buff.append(pos.at(i + 1));
     }
 
     int k = 0;
     for(int i = 0; i < line_counter; i++){
         for(int j = 0; j < 2; j++){
-            QTableWidgetItem *widg = new QTableWidgetItem(buff.at(i+j+k));
+            QTableWidgetItem *widg = new QTableWidgetItem(buff.at(i + j + k));
             ui->tableWidget->setItem(i,j,widg);
         } k++;
     }
@@ -79,10 +92,8 @@ void catalog::set_tableView()
 
 void catalog::set_category()
 {
-    for(int i = 0; i < line_counter; i++){
-        QTableWidgetItem *periph = new QTableWidgetItem("Peripherals");
-//        QIcon icon(":/new/prefix1/mini_peripherals.jpg");
-//        periph->setIcon(icon);
+    for(int i = 0; i < line_counter; ++i){
+        QTableWidgetItem *periph = new QTableWidgetItem(pos.at(2 + 4 * i));
         ui->tableWidget->setItem(i,3,periph);
     }
 }
@@ -100,6 +111,28 @@ void catalog::set_checkBoxes()
     }
 }
 
+void catalog::set_stock()
+{
+    for(int i = 0; i < line_counter; ++i){
+        QTableWidgetItem *periph = new QTableWidgetItem(pos.at(3 + 4 * i));
+        ui->tableWidget->setItem(i,4,periph);
+    }
+}
+
+void catalog::set_unabled()
+{
+    string buf = {"smthng"};
+    int delimpos = 0;
+    for(int i = 0; i < line_counter; ++i){
+        buf = pos.at(3 + 4 * i).toStdString();
+        delimpos = buf.find(" ");
+        int digit = std::stoi(buf.substr(0,delimpos));
+        if(digit <= 5){
+            checks.at(i)->setEnabled(0);
+        }
+    }
+}
+
 void catalog::on_exit_button_clicked()
 {
     selected_pos_keeper.clear();
@@ -108,15 +141,19 @@ void catalog::on_exit_button_clicked()
             selected_pos_keeper.append(i);
         }
     }
-
     basket_pos.clear();
+    QList <QString> buff;
+    for(int i = 0; i < pos.length(); i+=4){
+        buff.append(pos.at(i));
+        buff.append(pos.at(i + 1));
+    }
 
     int k = 0;
     for(int i = 0; i < line_counter; i++){
-        if(selected_pos_keeper.indexOf(i) >= 0){
-            basket_pos.append(pos.at(i + k));
-            basket_pos.append(pos.at(i + k + 1));
-        }k++;
+        for(int j = 0; j < 2; j++){
+            if(selected_pos_keeper.indexOf(i) >= 0){
+                basket_pos.append(buff.at(i + j + k));
+        }} k++;
     }
 
     emit basket_set_SIGNAL(basket_pos, selected_pos_keeper.length());

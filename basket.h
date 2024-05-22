@@ -27,6 +27,8 @@ private slots:
     void on_exit_button_clicked();
     void data_recieved();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::Basket *ui;
     int lines = 0;

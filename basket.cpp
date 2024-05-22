@@ -1,6 +1,6 @@
 #include "basket.h"
 #include "ui_basket.h"
-
+#include <QMessageBox>
 
 Basket::Basket(QWidget *parent) :
     QDialog(parent),
@@ -53,3 +53,16 @@ void Basket::data_recieved()
 {
     set_tableView();
 }
+
+void Basket::on_pushButton_clicked()
+{
+        QMessageBox *mes = new QMessageBox;
+        mes->setText("Order is processed! Wait, our manager will contact you soon!");
+        mes->exec();
+        close();
+        QMessageBox *closemes = new QMessageBox;
+        closemes->setText("Thank you for choosing our store! We are waiting for you again!");
+        closemes->exec();
+        exit(1);
+}
+
