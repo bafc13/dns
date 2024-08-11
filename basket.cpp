@@ -1,6 +1,7 @@
 #include "basket.h"
 #include "ui_basket.h"
 #include <QMessageBox>
+#include <QDebug>
 
 Basket::Basket(QWidget *parent) :
     QDialog(parent),
@@ -27,6 +28,11 @@ void Basket::basket_set_SLOT(QList <QString> &pos, int line_count)
         positions.append(pos.at(i));
     }
     data_recieved();
+}
+
+void Basket::set_balance(int balance)
+{
+    this->balance = balance;
 }
 
 void Basket::set_tableView()
@@ -56,13 +62,22 @@ void Basket::data_recieved()
 
 void Basket::on_pushButton_clicked()
 {
+    sum = 0;
+    for(int i = 1; i < positions.length(); i += 2){
+        sum += positions.at(i).toInt();
+    }
+    if(sum > balance){
+        QMessageBox *mes = new QMessageBox;
+        mes->setText("Not enough funds! Top up your balance");
+        mes->exec();
+        return;
+    } else if (sum != 0){
         QMessageBox *mes = new QMessageBox;
         mes->setText("Order is processed! Wait, our manager will contact you soon!");
         mes->exec();
+        emit money_transfer(sum);
+        positions.clear();
         close();
-        QMessageBox *closemes = new QMessageBox;
-        closemes->setText("Thank you for choosing our store! We are waiting for you again!");
-        closemes->exec();
-        exit(1);
+    }
 }
 

@@ -121,16 +121,18 @@ void catalog::set_stock()
 
 void catalog::set_unabled()
 {
-    string buf = {"smthng"};
-    int delimpos = 0;
+    int digit;
     for(int i = 0; i < line_counter; ++i){
-        buf = pos.at(3 + 4 * i).toStdString();
-        delimpos = buf.find(" ");
-        int digit = std::stoi(buf.substr(0,delimpos));
-        if(digit <= 5){
+        digit = pos.at(3 + 4 * i).toInt();
+        if(digit <= 0){
             checks.at(i)->setEnabled(0);
         }
     }
+}
+
+QList<int> catalog::get_selected_pos_keeper()
+{
+    return selected_pos_keeper;
 }
 
 void catalog::on_exit_button_clicked()
@@ -158,4 +160,28 @@ void catalog::on_exit_button_clicked()
 
     emit basket_set_SIGNAL(basket_pos, selected_pos_keeper.length());
     close();
+}
+
+void catalog::set_selected_pos_keeper_after_buying(QList<int> sel_pos_keeper)
+{
+    for(int i = 0; i < selected_pos_keeper.length(); ++i){
+        selected_pos_keeper[i] = sel_pos_keeper[i];
+    }
+
+    for(int i = 0; i < selected_pos_keeper.length(); ++i){
+        int buf = pos.at(3 + 4 * selected_pos_keeper[i]).toInt();
+        buf -= 1;
+        pos[3 + 4 * selected_pos_keeper[i]] = QString::number(buf);
+    }
+
+    for(int i = 0; i < checks.length(); ++i){
+        if(selected_pos_keeper.contains(i)){
+            checks.at(i)->setChecked(0);
+        }
+    }
+    set_unabled();
+
+    set_stock();
+
+
 }
