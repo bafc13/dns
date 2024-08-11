@@ -1,0 +1,13 @@
+AMD radeon rx580; 50000; GPU;100
+Athlon x286 super;10000; CPU;33
+AMD Ryzen 5 6600u;18900; CPU;0
+AMD Ryzen 3 5500u;13200; CPU;25
+AMD Ryzen 5 5600u;17340; CPU;30
+Intel core i7 13500k;28999; CPU;0
+Intel core i3 11900k;19800; CPU;5
+Inter core i5 2500k;11900; CPU;40
+Intel core i9 7700k;65900; CPU;2
+Iris XE graphics intel i9;19999; CPU;6
+Nvidia RTX 4060 super;60000; GPU;5
+Nvidia RTX3060 TI;40000; GPU;0 left
+Nvidia Geforce GTX 1650 ti;12500; GPU;0
